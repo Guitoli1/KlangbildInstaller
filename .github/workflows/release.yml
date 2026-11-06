@@ -111,7 +111,7 @@ jobs:
           pkgbuild --analyze --root payload comp.plist
           i=0
           while /usr/libexec/PlistBuddy -c "Print :$i:RootRelativeBundlePath" comp.plist >/dev/null 2>&1; do
-            /usr/libexec/PlistBuddy -c "Set :$i:BundleIsRelocatable false" comp.plist
+            plutil -replace "$i.BundleIsRelocatable" -bool NO comp.plist
             i=$((i + 1))
           done
           echo "$i Bundles als fest verortet markiert"
