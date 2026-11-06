@@ -1,0 +1,141 @@
+name: Alle Plugins bauen und veröffentlichen
+
+# Baut alle Klangbild-Plugins frisch aus ihren Repos (Universal: Apple Silicon + Intel),
+# signiert sie ad-hoc und veröffentlicht ein Release mit
+#   - Klangbild-Plugins.zip      (für install.sh, Installation per Terminal-Befehl)
+#   - Klangbild-Installer.pkg    (zum Doppelklicken)
+# Neu starten: Tab "Actions" → "Alle Plugins bauen und veröffentlichen" → "Run workflow"
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/release.yml", "pkg/**"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: "${{ matrix.repo }}"
+    runs-on: macos-15
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        include:
+          - { repo: KlangbildEQ,         targets: "KlangbildEQ" }
+          - { repo: KlangbildRaum,       targets: "KlangbildRaum" }
+          - { repo: KlangbildDuo,        targets: "KlangbildDuo" }
+          - { repo: KlangbildKalibrator, targets: "KlangbildKalibrator" }
+          - { repo: KlangbildBox,        targets: "KlangbildBox" }
+          - { repo: KlangbildOpto,       targets: "KlangbildOpto" }
+          - { repo: KlangbildKanalzug,   targets: "KlangbildKanalzug KlangbildDrive" }
+          - { repo: KlangbildBus,        targets: "KlangbildBus" }
+          - { repo: KlangbildPlatte,     targets: "KlangbildPlatte" }
+          - { repo: KlangbildBand,       targets: "KlangbildBand" }
+          - { repo: KlangbildLimit,      targets: "KlangbildLimit" }
+          - { repo: KlangbildLautheit,   targets: "KlangbildLautheit" }
+          - { repo: KlangbildPult,       targets: "KlangbildPult" }
+          - { repo: KlangbildTrio,       targets: "KlangbildTrio" }
+          - { repo: KlangbildWeite,      targets: "KlangbildWeite" }
+          - { repo: KlangbildReferenz,   targets: "KlangbildReferenz" }
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Guitoli1/${{ matrix.repo }}
+          path: src
+
+      - name: Konfigurieren
+        run: >
+          cmake -S src -B build -G Xcode
+          -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+
+      - name: Kompilieren (AU + VST3)
+        run: |
+          T=""
+          for t in ${{ matrix.targets }}; do T="$T --target ${t}_AU --target ${t}_VST3"; done
+          cmake --build build --config Release --parallel 4 $T
+
+      - name: Signieren und einsammeln
+        run: |
+          mkdir -p payload/Components payload/VST3
+          for t in ${{ matrix.targets }}; do
+            for c in build/${t}_artefacts/Release/AU/*.component; do
+              codesign --force --deep --sign - "$c"; ditto "$c" "payload/Components/$(basename "$c")"
+            done
+            for v in build/${t}_artefacts/Release/VST3/*.vst3; do
+              codesign --force --deep --sign - "$v"; ditto "$v" "payload/VST3/$(basename "$v")"
+            done
+          done
+          ls payload/Components payload/VST3
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plugin-${{ matrix.repo }}
+          path: payload/
+
+  package:
+    needs: build
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: plugin-*
+          merge-multiple: true
+          path: payload
+
+      - name: Prüfen (alle Audio Units registrieren sich bei macOS)
+        run: |
+          ls payload/Components payload/VST3
+          mkdir -p ~/Library/Audio/Plug-Ins/Components
+          ditto payload/Components ~/Library/Audio/Plug-Ins/Components
+          killall -9 AudioComponentRegistrar || true
+          sleep 5
+          auval -a | grep -i klbd | tee found.txt
+          echo "Gefundene Klangbild-AUs: $(wc -l < found.txt)"
+
+      - name: Zip und Installer bauen
+        run: |
+          VERSION=$(date +%Y.%m.%d).${{ github.run_number }}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          mkdir -p dist
+          ( cd payload && ditto -c -k --sequesterRsrc . "$GITHUB_WORKSPACE/dist/Klangbild-Plugins.zip" )
+          chmod +x pkg/scripts/postinstall
+          # Plugins immer an den Zielort legen (nicht an eine andere, zufällig gefundene Kopie "umziehen")
+          pkgbuild --analyze --root payload comp.plist
+          i=0
+          while /usr/libexec/PlistBuddy -c "Print :$i:RootRelativeBundlePath" comp.plist >/dev/null 2>&1; do
+            /usr/libexec/PlistBuddy -c "Set :$i:BundleIsRelocatable false" comp.plist
+            i=$((i + 1))
+          done
+          echo "$i Bundles als fest verortet markiert"
+          pkgbuild --root payload --component-plist comp.plist --install-location "/Library/Audio/Plug-Ins" \
+                   --identifier de.klangbild.alle --version "$VERSION" \
+                   --scripts pkg/scripts dist/klangbild-component.pkg
+          productbuild --distribution pkg/distribution.xml --package-path dist \
+                       --version "$VERSION" dist/Klangbild-Installer.pkg
+          rm dist/klangbild-component.pkg
+          ls -la dist
+
+      - name: Release veröffentlichen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "Alle Klangbild-Plugins (AU + VST3, Universal: Apple Silicon + Intel), frisch gebaut am $(date +%d.%m.%Y)."
+            echo
+            echo "**Installation per Terminal (empfohlen):**"
+            echo '```'
+            echo 'curl -fsSL https://raw.githubusercontent.com/Guitoli1/KlangbildInstaller/main/install.sh | bash'
+            echo '```'
+            echo
+            echo "**Oder:** Klangbild-Installer.pkg laden und öffnen (beim ersten Mal: Systemeinstellungen → Datenschutz & Sicherheit → „Dennoch öffnen“)."
+          } > notes.md
+          gh release create "v$VERSION" dist/Klangbild-Plugins.zip dist/Klangbild-Installer.pkg \
+            --title "Klangbild Plugins $VERSION" --notes-file notes.md --latest

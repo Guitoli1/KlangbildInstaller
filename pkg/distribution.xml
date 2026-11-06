@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="2">
+    <title>Klangbild Plugins</title>
+    <welcome mime-type="text/plain"><![CDATA[Dieses Paket installiert alle Klangbild-Plugins (Audio Unit für Logic Pro und VST3) in deinen Benutzer-Ordner:
+
+~/Library/Audio/Plug-Ins/Components
+~/Library/Audio/Plug-Ins/VST3
+
+Vorhandene Klangbild-Plugins werden durch die neuen Versionen ersetzt. Logic Pro bitte vorher beenden.]]></welcome>
+    <domains enable_anywhere="false" enable_currentUserHome="true" enable_localSystem="false"/>
+    <options customize="never" require-scripts="false" hostArchitectures="arm64,x86_64"/>
+    <choices-outline>
+        <line choice="alle"/>
+    </choices-outline>
+    <choice id="alle" title="Klangbild Plugins">
+        <pkg-ref id="de.klangbild.alle"/>
+    </choice>
+    <pkg-ref id="de.klangbild.alle">klangbild-component.pkg</pkg-ref>
+</installer-gui-script>

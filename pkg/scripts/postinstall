@@ -1,0 +1,4 @@
+#!/bin/bash
+# Audio-Unit-Verzeichnis von macOS neu einlesen lassen, damit Logic die Plugins sofort findet
+killall -9 AudioComponentRegistrar 2>/dev/null || true
+exit 0
