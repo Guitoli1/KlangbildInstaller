@@ -30,7 +30,7 @@ Weil das Paket nicht bei Apple registriert ist, blockiert macOS es beim ersten M
 | Klangbild Drive | Klangbild Opto | Klangbild Pult |
 | Klangbild Duo | Klangbild Bus | Klangbild Trio |
 | Klangbild Box | Klangbild Platte | Klangbild Weite |
-| Klangbild Raum | | Klangbild Limit |
+| Klangbild Raum | Klangbild Drums | Klangbild Limit |
 | Klangbild Kanalzug | | Klangbild Lautheit |
 | | | Klangbild Referenz |
 
