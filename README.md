@@ -24,7 +24,7 @@ Weil das Paket nicht bei Apple registriert ist, blockiert macOS es beim ersten M
 
 ## Enthaltene Plugins
 
-| Gitarre & Kanal | Mischen | Mastering |
+| Gitarre, Bass & Kanal | Mischen | Mastering |
 |---|---|---|
 | Klangbild Kalibrator | Klangbild EQ | Klangbild Band |
 | Klangbild Drive | Klangbild Opto | Klangbild Pult |
@@ -32,7 +32,9 @@ Weil das Paket nicht bei Apple registriert ist, blockiert macOS es beim ersten M
 | Klangbild Box | Klangbild Platte | Klangbild Weite |
 | Klangbild Raum | Klangbild Drums | Klangbild Limit |
 | Klangbild Kanalzug | | Klangbild Lautheit |
-| | | Klangbild Referenz |
+| Klangbild Bass | | Klangbild Referenz |
+
+Alle Oberflächen lassen sich an der unteren rechten Ecke von 75 % bis 150 % skalieren.
 
 Installiert wird in deinen Benutzer-Ordner:
 `~/Library/Audio/Plug-Ins/Components` (AU) und `~/Library/Audio/Plug-Ins/VST3`.

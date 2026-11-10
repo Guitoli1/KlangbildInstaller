@@ -42,6 +42,7 @@ jobs:
           - { repo: KlangbildWeite,      targets: "KlangbildWeite" }
           - { repo: KlangbildReferenz,   targets: "KlangbildReferenz" }
           - { repo: KlangbildDrums,      targets: "KlangbildDrums" }
+          - { repo: KlangbildBass,       targets: "KlangbildBass" }
     steps:
       - uses: actions/checkout@v4
         with:
