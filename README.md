@@ -33,6 +33,8 @@ Weil das Paket nicht bei Apple registriert ist, blockiert macOS es beim ersten M
 | Klangbild Raum | Klangbild Drums | Klangbild Limit |
 | Klangbild Kanalzug | | Klangbild Lautheit |
 | Klangbild Bass | | Klangbild Referenz |
+| Klangbild Vibe | | |
+| Klangbild Feder | | |
 
 Alle Oberflächen lassen sich an der unteren rechten Ecke von 75 % bis 150 % skalieren.
 
