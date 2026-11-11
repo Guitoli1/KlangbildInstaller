@@ -35,6 +35,7 @@ Weil das Paket nicht bei Apple registriert ist, blockiert macOS es beim ersten M
 | Klangbild Bass | | Klangbild Referenz |
 | Klangbild Vibe | Klangbild Stimme | |
 | Klangbild Feder | | |
+| Klangbild Echo | | |
 
 Alle Oberflächen lassen sich an der unteren rechten Ecke von 75 % bis 150 % skalieren.
 

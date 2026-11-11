@@ -46,6 +46,7 @@ jobs:
           - { repo: KlangbildVibe,       targets: "KlangbildVibe" }
           - { repo: KlangbildFeder,      targets: "KlangbildFeder" }
           - { repo: KlangbildStimme,     targets: "KlangbildStimme" }
+          - { repo: KlangbildEcho,       targets: "KlangbildEcho" }
     steps:
       - uses: actions/checkout@v4
         with:
