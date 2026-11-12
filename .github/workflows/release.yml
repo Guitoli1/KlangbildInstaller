@@ -48,6 +48,7 @@ jobs:
           - { repo: KlangbildStimme,     targets: "KlangbildStimme" }
           - { repo: KlangbildEcho,       targets: "KlangbildEcho" }
           - { repo: KlangbildLeslie,     targets: "KlangbildLeslie" }
+          - { repo: KlangbildSaal,       targets: "KlangbildSaal" }
     steps:
       - uses: actions/checkout@v4
         with:

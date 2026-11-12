@@ -34,10 +34,11 @@ Weil das Paket nicht bei Apple registriert ist, blockiert macOS es beim ersten M
 | Klangbild Kanalzug | | Klangbild Lautheit |
 | Klangbild Bass | | Klangbild Referenz |
 | Klangbild Vibe | Klangbild Stimme | |
-| Klangbild Feder | | |
+| Klangbild Feder | Klangbild Saal | |
 | Klangbild Echo | | |
 | Klangbild Leslie | | |
 
+Alle Plugins haben oben die Leiste **Meine Presets** (eigene Presets, auch zwischen Einzel-Plugin und Kanalzug-Modul).
 Alle Oberflächen lassen sich an der unteren rechten Ecke von 75 % bis 150 % skalieren.
 
 Installiert wird in deinen Benutzer-Ordner:
