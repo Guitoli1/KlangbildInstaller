@@ -49,6 +49,8 @@ jobs:
           - { repo: KlangbildEcho,       targets: "KlangbildEcho" }
           - { repo: KlangbildLeslie,     targets: "KlangbildLeslie" }
           - { repo: KlangbildSaal,       targets: "KlangbildSaal" }
+          - { repo: KlangbildWah,        targets: "KlangbildWah" }
+          - { repo: KlangbildFuzz,       targets: "KlangbildFuzz" }
     steps:
       - uses: actions/checkout@v4
         with:

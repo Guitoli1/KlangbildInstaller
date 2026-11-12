@@ -37,6 +37,8 @@ Weil das Paket nicht bei Apple registriert ist, blockiert macOS es beim ersten M
 | Klangbild Feder | Klangbild Saal | |
 | Klangbild Echo | | |
 | Klangbild Leslie | | |
+| Klangbild Wah | | |
+| Klangbild Fuzz | | |
 
 Alle Plugins haben oben die Leiste **Meine Presets** (eigene Presets, auch zwischen Einzel-Plugin und Kanalzug-Modul).
 Alle Oberflächen lassen sich an der unteren rechten Ecke von 75 % bis 150 % skalieren.
